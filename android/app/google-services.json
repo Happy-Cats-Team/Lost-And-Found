@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "586745137922",
+    "project_id": "lost-and-found-200d9",
+    "storage_bucket": "lost-and-found-200d9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:586745137922:android:8a04c39d458734c8a5901b",
+        "android_client_info": {
+          "package_name": "team.happycats.lost_and_found"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVAHFnTzGSq2yhzhggfsqkzU9viYoVZhQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
