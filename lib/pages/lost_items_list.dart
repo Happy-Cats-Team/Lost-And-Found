@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:lost_and_found/models/item.dart';
 
 class MyLostItemListPage extends StatefulWidget {
   const MyLostItemListPage({super.key, required this.title});
@@ -12,22 +14,45 @@ class MyLostItemListPage extends StatefulWidget {
 class _MyLostItemListPage extends State<MyLostItemListPage> {
   @override
   Widget build(BuildContext context) {
-    // return const Text("LOST ITEM LIST PAGE");
-    return ListView.builder(
-        itemCount: 14,
-        itemBuilder: (context, index) {
-          return Column(
-            children: const [
-              ListTile(
-                title: Text("Title"),
-                subtitle: Text("description"),
-                leading: Icon(Icons.account_tree),
-              ),
-              Divider()
-            ],
-          );
-        });
+    return FutureBuilder(
+      future: getItems(),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return const Text("Error");
+        }
+        if (snapshot.connectionState == ConnectionState.done) {
+          var posts = snapshot.data ?? [];
+          return ListView.builder(
+              itemCount: snapshot.data?.length,
+              itemBuilder: (context, index) {
+                return Column(
+                  children: [
+                    ListTile(
+                      title: Text('${posts[index].title}'),
+                      subtitle: Text('${posts[index].description}'),
+                      // leading: Image.network(posts[index].image),
+                    ),
+                    const Divider()
+                  ],
+                );
+              });
+        }
+        return const Center(
+          child: CircularProgressIndicator(
+            strokeWidth: 3,
+          ),
+        );
+      },
+    );
+  }
 
-    // TODO: implement build
+  Future<List<Item>> getItems() async {
+    var data = await FirebaseFirestore.instance
+        .collection("posts")
+        .where("type", isEqualTo: "lost")
+        .get();
+    return data.docs
+        .map((docSnapshot) => Item.fromJson(docSnapshot.data()))
+        .toList();
   }
 }

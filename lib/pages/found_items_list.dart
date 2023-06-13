@@ -1,4 +1,7 @@
-import 'package:flutter/cupertino.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+
+import '../models/item.dart';
 
 class MyFoundItemListPage extends StatefulWidget {
   const MyFoundItemListPage({super.key, required this.title});
@@ -12,8 +15,45 @@ class MyFoundItemListPage extends StatefulWidget {
 class _MyFoundItemListPage extends State<MyFoundItemListPage> {
   @override
   Widget build(BuildContext context) {
-    return const Text("FOUND ITEM LIST PAGE");
-    // TODO: implement build
-    throw UnimplementedError();
+    return FutureBuilder(
+      future: getItems(),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return const Text("Error");
+        }
+        if (snapshot.connectionState == ConnectionState.done) {
+          var posts = snapshot.data ?? [];
+          return ListView.builder(
+              itemCount: snapshot.data?.length,
+              itemBuilder: (context, index) {
+                return Column(
+                  children: [
+                    ListTile(
+                      title: Text('${posts[index].title}'),
+                      subtitle: Text('${posts[index].description}'),
+                      // leading: Image.network(posts[index].image), //Fixme Add
+                    ),
+                    const Divider()
+                  ],
+                );
+              });
+        }
+        return const Center(
+          child: CircularProgressIndicator(
+            strokeWidth: 3,
+          ),
+        );
+      },
+    );
+  }
+
+  Future<List<Item>> getItems() async {
+    var data = await FirebaseFirestore.instance
+        .collection("posts")
+        .where("type", isEqualTo: "found")
+        .get();
+    return data.docs
+        .map((docSnapshot) => Item.fromJson(docSnapshot.data()))
+        .toList();
   }
 }
