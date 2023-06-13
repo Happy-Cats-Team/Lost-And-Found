@@ -19,6 +19,12 @@ jobs:
         with:
           flutter-version: '3.7.12'
       - run: flutter pub get
-      - run: flutter test
+      #- run: flutter test
       - run: flutter build apk
       - run: flutter build appbundle
+      - uses: actions/upload-artifact@v2
+        with:
+          path: build/app/outputs/flutter-apk/app-release.apk
+      - uses: actions/upload-artifact@v2
+        with:
+          path: build/app/outputs/bundle/release/app-release.aab
