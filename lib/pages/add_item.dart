@@ -122,13 +122,6 @@ class _MyAddPageItem extends State<MyAddItemPage> {
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text('Post Added')));
     });
-    //     .onError((error, stackTrace) {
-    //   ScaffoldMessenger.of(context)
-    //       .showSnackBar(SnackBar(content: Text('Error ${error}')));
-    // }).then((value) {
-    //   ScaffoldMessenger.of(context)
-    //       .showSnackBar(const SnackBar(content: Text('Post added')));
-    // });
   }
 
   Future<List<Item>> getItems() async {
