@@ -66,7 +66,7 @@ class _BottomNavigationExampleState extends State<MyHomePage> {
     const MyLostItemListPage(title: "List Items"), //0
     const MyFoundItemListPage(title: "Found Items"), //1
     const MyLoginPage(title: "Login"),
-    const MyAddItemPage(title: "Add Item") //3
+    MyAddItemPage(title: "Add Item") //3
   ];
 
   _changeTab(int index) {

@@ -2,20 +2,21 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lost_and_found/models/item.dart';
-import 'package:lost_and_found/pages/register.dart';
 
-class MyLoginPage extends StatefulWidget {
-  const MyLoginPage({super.key, required this.title});
+class MyRegisterPage extends StatefulWidget {
+  const MyRegisterPage({super.key, required this.title});
 
   final String title;
 
   @override
-  State<MyLoginPage> createState() => _MyLoginPage();
+  State<MyRegisterPage> createState() => _MyRegisterPage();
 }
 
-class _MyLoginPage extends State<MyLoginPage> {
+class _MyRegisterPage extends State<MyRegisterPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final repeatPasswordController = TextEditingController();
+
   // final descriptionController = TextEditingController();
 
   @override
@@ -49,29 +50,36 @@ class _MyLoginPage extends State<MyLoginPage> {
           const SizedBox(
             height: 16,
           ),
-          ElevatedButton(
-            onPressed: () {
-              FirebaseAuth.instance
-                  .signInWithEmailAndPassword(
-                      email: emailController.text,
-                      password: passwordController.text)
-                  .then((value) {});
-            },
-            child: const Text("Login"),
-          ),
-          const Text("Not having and account?"),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => Scaffold(
-                  body: const MyRegisterPage(
-                    title: 'Register',
-                  ),
-                  appBar: AppBar(title: const Text("Register")),
-                ),
-              ));
-            },
-            child: const Text("Register"),
+          TextField(
+            obscureText: true,
+            controller: repeatPasswordController,
+            maxLines: 1,
+            decoration: const InputDecoration(
+              icon: Icon(Icons.lock),
+              filled: true,
+              labelText: 'Repeat password',
+            ),
+          ), //
+          Container(
+            alignment: Alignment.topRight,
+            child: ElevatedButton(
+              onPressed: () {
+                var password = passwordController.text;
+                var repeatPassword = repeatPasswordController.text;
+                if (password == repeatPassword) {
+                  FirebaseAuth.instance
+                      .createUserWithEmailAndPassword(
+                          email: emailController.text,
+                          password: passwordController.text)
+                      .then((value) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text('You successfully registered')));
+                  }).onError((error, stackTrace) {});
+                  return;
+                }
+              },
+              child: const Text("Register"),
+            ),
           )
         ],
       ),
