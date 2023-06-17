@@ -1,7 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:lost_and_found/models/item.dart';
 
 class MyRegisterPage extends StatefulWidget {
   const MyRegisterPage({super.key, required this.title});
@@ -74,7 +72,12 @@ class _MyRegisterPage extends State<MyRegisterPage> {
                       .then((value) {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text('You successfully registered')));
-                  }).onError((error, stackTrace) {});
+                    Navigator.pop(context);
+                  }).onError((error, stackTrace) {
+                    if (error == null) return;
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(SnackBar(content: Text('${error}')));
+                  });
                   return;
                 }
               },
@@ -84,40 +87,5 @@ class _MyRegisterPage extends State<MyRegisterPage> {
         ],
       ),
     );
-  }
-
-  addItem(
-      {required String title,
-      required String description,
-      required String phone,
-      String? telegram}) async {
-    print(title);
-    print(description);
-    print(phone);
-    print(FirebaseAuth.instance.currentUser?.uid);
-    return;
-    FirebaseFirestore.instance.collection("posts").add(Item(
-            title: title,
-            description: description,
-            phone: phone,
-            telegram: telegram)
-        .toJson());
-    //     .onError((error, stackTrace) {
-    //   ScaffoldMessenger.of(context)
-    //       .showSnackBar(SnackBar(content: Text('Error ${error}')));
-    // }).then((value) {
-    //   ScaffoldMessenger.of(context)
-    //       .showSnackBar(const SnackBar(content: Text('Post added')));
-    // });
-  }
-
-  Future<List<Item>> getItems() async {
-    var data = await FirebaseFirestore.instance
-        .collection("posts")
-        .where("type", isEqualTo: "lost")
-        .get();
-    return data.docs
-        .map((docSnapshot) => Item.fromJson(docSnapshot.data()))
-        .toList();
   }
 }

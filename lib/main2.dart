@@ -82,7 +82,9 @@ class _BottomNavigationExampleState extends State<MyHomePage> {
           title: const Text("Lost & Found"),
           actions: [Text("${FirebaseAuth.instance.currentUser?.email}")]),
       body: _pages[_selectedTab],
-      floatingActionButton: _selectedTab >= 0 && _selectedTab <= 1
+      floatingActionButton: _selectedTab >= 0 &&
+              _selectedTab <= 1 &&
+              FirebaseAuth.instance.currentUser != null
           ? FloatingActionButton(
               backgroundColor: const Color.fromRGBO(0x78, 0x8A, 0xC9, 1),
               child: const Icon(Icons.edit),

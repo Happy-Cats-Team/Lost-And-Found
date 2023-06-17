@@ -62,18 +62,18 @@ class MyHomePage extends StatefulWidget {
 class _BottomNavigationExampleState extends State<MyHomePage> {
   int _selectedTab = 0;
 
-  final List _pages = [
-    const MyLostItemListPage(title: "List Items"), //0
-    const MyFoundItemListPage(title: "Found Items"), //1
-    const MyLoginPage(title: "Login"),
-    MyAddItemPage(title: "Add Item") //3
-  ];
-
   _changeTab(int index) {
     setState(() {
       _selectedTab = index;
     });
   }
+
+  final List _pages = [
+    const MyLostItemListPage(title: "List Items"), //0
+    const MyFoundItemListPage(title: "Found Items"), //1
+    const MyLoginPage(title: "Login"),
+    const MyAddItemPage(title: "Add Item") //3
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +82,9 @@ class _BottomNavigationExampleState extends State<MyHomePage> {
           title: const Text("Lost & Found"),
           actions: [Text("${FirebaseAuth.instance.currentUser?.email}")]),
       body: _pages[_selectedTab],
-      floatingActionButton: _selectedTab >= 0 && _selectedTab <= 1
+      floatingActionButton: _selectedTab >= 0 &&
+              _selectedTab <= 1 &&
+              FirebaseAuth.instance.currentUser != null
           ? FloatingActionButton(
               backgroundColor: const Color.fromRGBO(0x78, 0x8A, 0xC9, 1),
               child: const Icon(Icons.edit),

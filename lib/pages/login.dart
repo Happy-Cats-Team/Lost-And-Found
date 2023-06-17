@@ -59,7 +59,7 @@ class _MyLoginPage extends State<MyLoginPage> {
             },
             child: const Text("Login"),
           ),
-          const Text("Not having and account?"),
+          const Text("Don't have an account?"),
           ElevatedButton(
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
@@ -76,31 +76,6 @@ class _MyLoginPage extends State<MyLoginPage> {
         ],
       ),
     );
-  }
-
-  addItem(
-      {required String title,
-      required String description,
-      required String phone,
-      String? telegram}) async {
-    print(title);
-    print(description);
-    print(phone);
-    print(FirebaseAuth.instance.currentUser?.uid);
-    return;
-    FirebaseFirestore.instance.collection("posts").add(Item(
-            title: title,
-            description: description,
-            phone: phone,
-            telegram: telegram)
-        .toJson());
-    //     .onError((error, stackTrace) {
-    //   ScaffoldMessenger.of(context)
-    //       .showSnackBar(SnackBar(content: Text('Error ${error}')));
-    // }).then((value) {
-    //   ScaffoldMessenger.of(context)
-    //       .showSnackBar(const SnackBar(content: Text('Post added')));
-    // });
   }
 
   Future<List<Item>> getItems() async {

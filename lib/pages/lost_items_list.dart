@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:lost_and_found/models/item.dart';
 
+import 'detail_view.dart';
+
 class MyLostItemListPage extends StatefulWidget {
   const MyLostItemListPage({super.key, required this.title});
 
@@ -31,6 +33,14 @@ class _MyLostItemListPage extends State<MyLostItemListPage> {
                       title: Text('${posts[index].title}'),
                       subtitle: Text('${posts[index].description}'),
                       // leading: Image.network(posts[index].image),
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => Scaffold(
+                            body: DetailViewItem(item: posts[index]),
+                            appBar: AppBar(title: const Text("Detail View")),
+                          ),
+                        ));
+                      },
                     ),
                     const Divider()
                   ],
